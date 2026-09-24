@@ -1,0 +1,16 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "chronograph-ai"
+version = "0.0.0"
+description = "Temporal knowledge and governed agent-memory engine"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [{ name = "Arees Shah" }]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/chronograph_ai"]
+
