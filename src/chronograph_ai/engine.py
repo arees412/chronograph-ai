@@ -8,6 +8,8 @@ from datetime import datetime
 from threading import RLock
 from typing import Any
 
+from pydantic import TypeAdapter
+
 from chronograph_ai.audit import AuditLogger, make_evidence_bundle
 from chronograph_ai.entity_resolution import EntityResolver
 from chronograph_ai.models import (
@@ -108,11 +110,15 @@ class ChronoGraphEngine:
                 ingested_at=recorded_at,
                 content_hash=payload_hash,
             )
-            entity_candidates = bounded_provider_call(
-                "extract_entities", lambda: self.entity_extractor.extract_entities(episode)
+            entity_candidates = TypeAdapter(list[EntityCandidate]).validate_python(
+                bounded_provider_call(
+                    "extract_entities", lambda: self.entity_extractor.extract_entities(episode)
+                )
             )
-            fact_candidates = bounded_provider_call(
-                "extract_facts", lambda: self.fact_extractor.extract_facts(episode)
+            fact_candidates = TypeAdapter(list[FactCandidate]).validate_python(
+                bounded_provider_call(
+                    "extract_facts", lambda: self.fact_extractor.extract_facts(episode)
+                )
             )
             entity_candidates = self._complete_entity_candidates(entity_candidates, fact_candidates)
             self._prevalidate(entity_candidates, fact_candidates)

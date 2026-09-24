@@ -50,7 +50,17 @@ class EntityResolver:
             if normalized
             in {entity.normalized_name, *(alias.normalized for alias in entity.aliases)}
         ]
-        matches = identifier_matches or lexical_matches
+        compatible_lexical_matches = lexical_matches
+        if candidate.identifiers:
+            compatible_lexical_matches = [
+                entity
+                for entity in lexical_matches
+                if not any(
+                    key in entity.identifiers and entity.identifiers[key] != value
+                    for key, value in candidate.identifiers.items()
+                )
+            ]
+        matches = identifier_matches or compatible_lexical_matches
         unique = {entity.id: entity for entity in matches}
         if len(unique) == 1:
             entity = next(iter(unique.values()))
