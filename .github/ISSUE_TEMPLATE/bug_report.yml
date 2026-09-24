@@ -1,0 +1,42 @@
+name: Bug report
+description: Report a reproducible ChronoGraph defect
+title: "bug: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include credentials, private source data, or vulnerability details.
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Observed behavior
+      description: What happened, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Include sanitized fixture data, commands, and the commit SHA.
+    validations:
+      required: true
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+    validations:
+      required: true
+  - type: dropdown
+    id: backend
+    attributes:
+      label: Backend
+      options:
+        - In-memory
+        - SQLite
+    validations:
+      required: true
+  - type: textarea
+    id: temporal
+    attributes:
+      label: Time lens and evidence
+      description: Provide valid_time, known_at, relevant fact status, and sanitized provenance.
