@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Annotated, Any
 
 import typer
+from pydantic_core import to_jsonable_python
 
 from chronograph_ai.engine import ChronoGraphEngine
 from chronograph_ai.evaluation import run_evaluation
@@ -49,9 +50,7 @@ def _engine(ctx: typer.Context) -> ChronoGraphEngine:
 
 
 def _emit(value: Any) -> None:
-    if hasattr(value, "model_dump"):
-        value = value.model_dump(mode="json")
-    typer.echo(json.dumps(value, indent=2, sort_keys=True, default=str))
+    typer.echo(json.dumps(to_jsonable_python(value), indent=2, sort_keys=True))
 
 
 def _parse_time(value: str) -> datetime:
